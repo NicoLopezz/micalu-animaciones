@@ -1,10 +1,18 @@
 // Script de prueba para verificar la conexión con Firebase
 import { db } from './firebase';
-import { collection, addDoc, getDocs } from 'firebase/firestore';
+import { collection, addDoc, getDocs, doc, setDoc } from 'firebase/firestore';
 
 export const testFirebaseConnection = async () => {
   try {
     console.log('🔥 Probando conexión con Firebase...');
+    
+    // Verificar que las variables de entorno estén configuradas
+    const apiKey = process.env.NEXT_PUBLIC_FIREBASE_API_KEY;
+    if (!apiKey) {
+      throw new Error('Variables de entorno de Firebase no configuradas');
+    }
+    
+    console.log('✅ Variables de entorno configuradas');
     
     // Intentar escribir un documento de prueba
     const testDoc = await addDoc(collection(db, 'test'), {
@@ -22,6 +30,6 @@ export const testFirebaseConnection = async () => {
     return true;
   } catch (error) {
     console.error('❌ Error de conexión con Firebase:', error);
-    return false;
+    throw error;
   }
 };

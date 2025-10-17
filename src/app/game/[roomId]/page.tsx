@@ -80,7 +80,7 @@ export default function GameRoom() {
 
           <div className="grid md:grid-cols-2 gap-6">
             <div>
-              <h3 className="text-lg font-semibold mb-4">Jugadores ({currentRoom.players.length}/{currentRoom.settings.maxPlayers})</h3>
+              <h3 className="text-lg font-semibold mb-4 text-gray-800">Jugadores ({currentRoom.players.length}/{currentRoom.settings.maxPlayers})</h3>
               <div className="space-y-2">
                 {currentRoom.players.map((player) => (
                   <div 
@@ -92,11 +92,11 @@ export default function GameRoom() {
                     }`}
                   >
                     <div className="flex items-center justify-between">
-                      <span className="font-medium">
+                      <span className="font-medium text-gray-800">
                         {player.name}
                         {player.isAdmin && <span className="ml-2 text-xs bg-blue-500 text-white px-2 py-1 rounded">Admin</span>}
                       </span>
-                      <span className="text-sm text-gray-500">
+                      <span className="text-sm text-gray-600 font-medium">
                         {player.score} pts
                       </span>
                     </div>
@@ -106,9 +106,9 @@ export default function GameRoom() {
             </div>
 
             <div>
-              <h3 className="text-lg font-semibold mb-4">Estado de la Sala</h3>
+              <h3 className="text-lg font-semibold mb-4 text-gray-800">Estado de la Sala</h3>
               <div className="bg-gray-50 p-4 rounded-lg">
-                <p className="text-sm text-gray-600 mb-2">
+                <p className="text-sm text-gray-700 mb-2">
                   Estado: <span className={`font-medium ${
                     currentRoom.status === 'waiting' ? 'text-yellow-600' :
                     currentRoom.status === 'active' ? 'text-green-600' :
@@ -119,10 +119,10 @@ export default function GameRoom() {
                      'Finalizado'}
                   </span>
                 </p>
-                <p className="text-sm text-gray-600 mb-2">
+                <p className="text-sm text-gray-700 mb-2">
                   Preguntas: {currentRoom.questions.length}
                 </p>
-                <p className="text-sm text-gray-600">
+                <p className="text-sm text-gray-700">
                   Tiempo por pregunta: {currentRoom.settings.questionTimeLimit}s
                 </p>
               </div>

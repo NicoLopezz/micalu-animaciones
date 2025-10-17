@@ -1,20 +1,32 @@
 'use client';
-import { useState } from 'react';
-import { testFirebaseConnection } from '@/lib/test-firebase';
+import { useState, useEffect } from 'react';
 
 export default function TestFirebase() {
   const [isTesting, setIsTesting] = useState(false);
   const [result, setResult] = useState<string | null>(null);
+  const [envVars, setEnvVars] = useState<any>(null);
+
+  useEffect(() => {
+    // Verificar variables de entorno
+    setEnvVars({
+      apiKey: process.env.NEXT_PUBLIC_FIREBASE_API_KEY ? '✅ Configurada' : '❌ No configurada',
+      authDomain: process.env.NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN ? '✅ Configurada' : '❌ No configurada',
+      projectId: process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID ? '✅ Configurada' : '❌ No configurada',
+    });
+  }, []);
 
   const handleTest = async () => {
     setIsTesting(true);
     setResult(null);
     
     try {
-      const success = await testFirebaseConnection();
-      setResult(success ? '✅ Conexión exitosa con Firebase!' : '❌ Error de conexión');
-    } catch (error) {
-      setResult(`❌ Error: ${error}`);
+      // Usar prueba simple primero
+      const { simpleFirebaseTest } = await import('@/lib/simple-firebase-test');
+      await simpleFirebaseTest();
+      setResult('✅ Firebase inicializado correctamente!');
+    } catch (error: any) {
+      console.error('Error:', error);
+      setResult(`❌ Error: ${error.message || error}`);
     } finally {
       setIsTesting(false);
     }
@@ -26,6 +38,18 @@ export default function TestFirebase() {
         <h1 className="text-2xl font-bold text-center mb-6">Prueba de Firebase</h1>
         
         <div className="space-y-4">
+          {/* Estado de variables de entorno */}
+          {envVars && (
+            <div className="bg-gray-50 p-4 rounded-lg">
+              <h3 className="font-semibold mb-2">Variables de Entorno:</h3>
+              <div className="text-sm space-y-1">
+                <div>API Key: {envVars.apiKey}</div>
+                <div>Auth Domain: {envVars.authDomain}</div>
+                <div>Project ID: {envVars.projectId}</div>
+              </div>
+            </div>
+          )}
+
           <button
             onClick={handleTest}
             disabled={isTesting}
@@ -45,10 +69,9 @@ export default function TestFirebase() {
           <div className="text-sm text-gray-600">
             <p><strong>Instrucciones:</strong></p>
             <ol className="list-decimal list-inside space-y-1 mt-2">
-              <li>Copia las credenciales de Firebase</li>
-              <li>Pega las credenciales en .env.local</li>
-              <li>Reinicia el servidor (npm run dev)</li>
+              <li>Verifica que las variables estén configuradas arriba</li>
               <li>Haz clic en "Probar Conexión"</li>
+              <li>Revisa la consola del navegador para más detalles</li>
             </ol>
           </div>
         </div>

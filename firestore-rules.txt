@@ -1,0 +1,20 @@
+// Reglas de Firestore para desarrollo
+// Copia estas reglas en Firebase Console > Firestore Database > Reglas
+
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // Permitir lectura y escritura para todas las salas durante desarrollo
+    match /rooms/{roomId} {
+      allow read, write: if true;
+    }
+    
+    // Permitir lectura y escritura para todas las respuestas durante desarrollo
+    match /answers/{answerId} {
+      allow read, write: if true;
+    }
+  }
+}
+
+// IMPORTANTE: Estas reglas son para DESARROLLO únicamente
+// En producción, deberías implementar reglas más restrictivas
